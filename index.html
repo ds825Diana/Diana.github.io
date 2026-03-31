@@ -228,18 +228,18 @@
       <span data-lang="zh">AI / 机器学习工程师 &amp; 研究员</span>
     </p>
     <h1 class="hero-name">
-      <span data-lang="en">Your<br><span class="accent">Name</span></span>
-      <span data-lang="zh" style="display:none">你的<br><span class="accent">名字</span></span>
+      <span data-lang="en" id="hero-name-en">Your Name</span>
+      <span data-lang="zh" id="hero-name-zh" style="display:none">你的名字</span>
     </h1>
     <p class="hero-title">
       <span data-lang="en">MACHINE LEARNING · DATA SCIENCE · DEEP LEARNING</span>
       <span data-lang="zh">机器学习 · 数据科学 · 深度学习</span>
     </p>
     <p class="hero-bio">
-      <span data-lang="en">I build intelligent systems that bridge research and production.
+      <span data-lang="en" id="hero-bio-en">I build intelligent systems that bridge research and production.
       Passionate about making models that actually work in the real world —
       from experimentation to deployment at scale.</span>
-      <span data-lang="zh">我构建连接研究与生产的智能系统，专注于将模型从实验阶段推进到大规模部署，让 AI 真正落地。</span>
+      <span data-lang="zh" id="hero-bio-zh">我构建连接研究与生产的智能系统，专注于将模型从实验阶段推进到大规模部署，让 AI 真正落地。</span>
     </p>
     <div class="hero-cta">
       <a href="#projects" class="btn btn-primary">
@@ -276,12 +276,12 @@
   <div class="about-grid">
     <div class="about-text reveal">
       <p data-lang="en">
-        Hi — I'm <span class="about-hl">Your Name</span>, an AI/ML engineer
-        based in [City]. Currently pursuing / completing my degree in [Field] at [University],
+        Hi — I'm <span class="about-hl about-hl-name">Diandian (Diana) Sun</span>, an AI/ML engineer
+        based in <span id="about-city-en">London</span>. Currently pursuing / completing my degree in [Field] at [University],
         with a focus on deep learning and applied machine learning systems.
       </p>
       <p data-lang="zh">
-        你好 — 我是<span class="about-hl">你的名字</span>，一名位于[城市]的 AI/ML 工程师，
+        你好 — 我是<span class="about-hl about-hl-name">孙点点</span>，一名位于<span id="about-city-zh">伦敦</span>的 AI/ML 工程师，
         目前就读/毕业于[学校][专业]，专注于深度学习与机器学习系统的应用研究。
       </p>
       <p data-lang="en">
@@ -317,12 +317,12 @@
       <div class="t-body">
         <div class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">cat profile.json</span></div>
         <div class="t-line t-out">{</div>
-        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"name"</span>: <span class="t-val">"Your Name"</span>,</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"name"</span>: <span class="t-val">"<span id="t-name">Your Name</span>"</span>,</div>
         <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"role"</span>: <span class="t-val">"<span data-lang='en'>ML Engineer</span><span data-lang='zh'>机器学习工程师</span>"</span>,</div>
-        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"location"</span>: <span class="t-val">"<span data-lang='en'>Your City</span><span data-lang='zh'>你的城市</span>"</span>,</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"location"</span>: <span class="t-val">"<span data-lang='en' id="t-city">Your City</span><span data-lang='zh' id="t-city-zh">你的城市</span>"</span>,</div>
         <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"education"</span>: {</div>
-        <div class="t-line t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"degree"</span>: <span class="t-val">"<span data-lang='en'>MSc Computer Science</span><span data-lang='zh'>计算机科学硕士</span>"</span>,</div>
-        <div class="t-line t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"uni"</span>: <span class="t-val">"<span data-lang='en'>Your University</span><span data-lang='zh'>你的大学</span>"</span></div>
+        <div class="t-line t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"degree"</span>: <span class="t-val">"<span data-lang='en' id="t-degree">MSc Computer Science</span><span data-lang='zh'>计算机科学硕士</span>"</span>,</div>
+        <div class="t-line t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"uni"</span>: <span class="t-val">"<span data-lang='en' id="t-uni">Your University</span><span data-lang='zh' id="t-uni-zh">你的大学</span>"</span></div>
         <div class="t-line t-out">&nbsp;&nbsp;},</div>
         <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"focus"</span>: [<span class="t-val">"LLMs"</span>, <span class="t-val">"CV"</span>, <span class="t-val">"RL"</span>],</div>
         <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"open_to_work"</span>: <span style="color:#a78bfa">true</span></div>
@@ -504,11 +504,37 @@ async function loadContent() {
     if (data.skills)   renderSkills(data.skills);
     if (data.projects) renderProjects(data.projects);
     if (data.meta) {
-      if (data.meta.name_en) {
-        document.querySelector('.nav-logo').innerHTML = data.meta.initials+'<span>.dev</span>';
-        document.querySelector('#stat-projects').textContent = data.meta.project_count||'6+';
-        document.querySelector('#stat-years').textContent    = data.meta.years_exp||'3';
+      const m = data.meta;
+      // nav logo
+      if (m.initials) document.querySelector('.nav-logo').innerHTML = m.initials+'<span>.dev</span>';
+      // page title
+      if (m.name_en) document.title = m.name_en + ' · AI / ML Engineer';
+      // hero name
+      if (m.name_en) document.getElementById('hero-name-en').textContent = m.name_en;
+      if (m.name_zh) document.getElementById('hero-name-zh').textContent = m.name_zh;
+      // hero bio
+      if (m.bio_en) document.getElementById('hero-bio-en').textContent = m.bio_en;
+      if (m.bio_zh) document.getElementById('hero-bio-zh').textContent = m.bio_zh;
+      // stats
+      if (m.project_count) document.getElementById('stat-projects').textContent = m.project_count;
+      if (m.years_exp)     document.getElementById('stat-years').textContent    = m.years_exp;
+      // email
+      if (m.email) {
+        document.querySelectorAll('a[href^="mailto:"]').forEach(a => a.href = 'mailto:'+m.email);
+        document.querySelector('.footer-email').textContent = m.email;
       }
+      // social links
+      if (m.github)   document.querySelector('a[href*="github.com"]').href   = m.github;
+      if (m.linkedin) document.querySelector('a[href*="linkedin.com"]').href = m.linkedin;
+      // terminal card
+      if (m.name_en)    document.getElementById('t-name').textContent    = m.name_en;
+      if (m.city_en)    document.getElementById('t-city').textContent    = m.city_en;
+      if (m.city_zh)    document.getElementById('t-city-zh').textContent = m.city_zh;
+      if (m.degree_en)  document.getElementById('t-degree').textContent  = m.degree_en;
+      if (m.uni_en)     document.getElementById('t-uni').textContent     = m.uni_en;
+      if (m.uni_zh)     document.getElementById('t-uni-zh').textContent  = m.uni_zh;
+      // about text
+      if (m.name_en) document.querySelectorAll('.about-hl-name').forEach(el => el.textContent = m.name_en);
     }
   } catch {
     renderSkills(DEFAULT.skills);
