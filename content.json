@@ -1,0 +1,202 @@
+{
+  "meta": {
+    "name_en": "Diandian (Diana) Sun",
+    "name_zh": "孙点点",
+    "initials": "DS",
+    "project_count": "6+",
+    "years_exp": "0",
+    "city_en": "",
+    "city_zh": "伦敦",
+    "email": "diaanasun@gmail.com",
+    "degree_en": "MSc Artificial Intelligence Applications and Innovation",
+    "uni_en": "Imperial College London",
+    "uni_zh": "伦敦帝国理工学院",
+    "github": "https://github.com/ds825Diana",
+    "linkedin": "www.linkedin.com/in/diana-sun-070961377",
+    "bio_en": "Specializing in computer vision, multimodal perception systems, embodied AI, and autonomous robot navigation with production-grade deployment experience.\nIn robotics development, I designed a ROS-based autonomous navigation framework integrating AMCL localization, TEB path planning, and YOLO visual detection, achieving zero-collision autonomous cruising in constrained environments. For the \"Smart Fork\" intelligent forklift project, I proposed a 2D vision + SLAM fusion solution, trained a lightweight YOLOv9 detector on 500 self-collected construction site images, and coordinated the full perception-decision-control pipeline. At TAICH Technology, I led a highway UAV inspection project—from customer requirements to \"hardware-platform-network\" architecture deployment within one month, built an anomaly mining pipeline over 3,000+ flight logs, and improved defect detection accuracy by 9%.\nTechnically, I possess end-to-end capabilities from algorithm R&D to engineering deployment: proficient in ROS, PyTorch, YOLO series detection frameworks, with expertise in point cloud processing, multimodal fusion, and edge deployment optimization. My recent IoT sleep monitoring project, using ESP32 and Apple Watch to build a noise-sleep correlation analysis system, demonstrates my system design thinking in sensor fusion and data-driven decision making.\nI pursue \"rapid engineering and cross-domain transfer\"—completing full-cycle delivery from customer requirements to system deployment in 30 days. From UAV inspection → autonomous driving → open-vocabulary 3D scene understanding, I continuously expand my embodied intelligence toolkit. Eager to join cutting-edge robotics teams to transform multimodal perception technologies into intelligent systems that change the physical world.",
+    "bio_zh": "专注于计算机视觉,多模态感知系统,具身智能与机器人自主导航的落地实践。\n在机器人系统开发中，设计了基于ROS的自主导航框架，融合AMCL定位、TEB路径规划与YOLO视觉检测，实现微小场景下的零碰撞自主巡航。针对\"智慧小叉\"智能叉车项目，提出2D视觉+SLAM融合方案，在500张自采工地图像上训练轻量级YOLOv9模型，协调感知-决策-控制全链路接口；在泰昌科技的高速公路无人机巡检项目中，一个月内完成从需求调研到\"硬件-平台-网络\"架构落地，构建基于3000+飞行日志的异常挖掘流水线，将缺陷检测准确率提升9%。\n技术层面，具备从算法研发到工程部署的端到端能力：熟练ROS、PyTorch、YOLO系列检测框架，掌握点云处理、多模态融合与边缘部署优化。近期完成的IoT睡眠监测项目，通过ESP32+Apple Watch构建噪声-睡眠关联分析系统，验证了在传感器融合与数据驱动决策方面的系统设计思维。\n追求\"快速工程化与跨场景迁移\"——30天内完成客户需求到系统上线的全流程，从无人机巡检→自动驾驶→开放词汇3D场景理解，持续扩展具身智能技术栈。期待加入前沿机器人团队，将多模态感知技术转化为改变物理世界的智能系统。"
+  },
+  "projects": [
+    {
+      "num": "04",
+      "year": "2026",
+      "url": "https://github.com/ds825Diana/sleep-monitor-iot",
+      "title_en": "Sleep & Noise Monitoring System",
+      "title_zh": "睡眠噪声监测与睡眠质量分析系统 ",
+      "desc_en": "An end-to-end IoT health monitoring system that reveals hidden correlations between environmental noise and sleep quality through multi-source sensor fusion. The system employs an ESP32-S3 microcontroller paired with an INMP441 MEMS microphone, capturing continuous nighttime audio at 16kHz sampling rate via I2S digital interface for high-precision sound pressure monitoring; simultaneously integrating Apple Watch sleep stage data to build a cross-device temporal alignment and correlation analysis framework.\nThe core innovation addresses the pain point of \"lack of objective correlation between subjective sleep experience and environmental noise\": through 60-second interval RMS noise calculation and interval matching algorithms with manually transcribed sleep stage data, the system achieves precise alignment between acoustic environmental features and Deep/Core/REM/Awake states. A lightweight Flask backend receives real-time HTTP data streams, while the frontend visualization dashboard provides noise-sleep correlation analysis, anomaly event detection (3-sigma rule), K-Means state clustering, and cross-night trend comparison—helping users identify interference patterns of specific noise events on sleep architecture.",
+      "desc_zh": "一个端到端的物联网健康监测系统，通过多源传感器融合揭示环境噪声与睡眠质量的隐性关联。系统采用ESP32-S3微控制器搭配INMP441 MEMS麦克风，以16kHz采样率进行连续夜间噪声采集，通过I2S数字音频接口实现高精度声压监测；同时整合Apple Watch睡眠阶段数据，构建跨设备的时间对齐与关联分析框架。\n核心创新在于解决了\"主观睡眠感受与环境噪声缺乏客观关联\"的痛点：通过60秒间隔的RMS噪声计算与睡眠阶段转录数据的区间匹配算法，实现环境声学特征与深睡/浅睡/REM/清醒状态的精准对齐。系统部署轻量级Flask后端接收实时HTTP数据流，前端可视化面板提供噪声-睡眠相关性分析、异常事件检测（3σ准则）、K-Means状态聚类及跨夜间趋势对比，帮助用户识别特定噪声事件对睡眠结构的干扰模式。",
+      "stack": [
+        "Embedded Sensing",
+        "Flask",
+        "Time-Series Analytics",
+        "Statistical Mining",
+        "Cross-Device Data Fusion"
+      ]
+    },
+    {
+      "num": "03",
+      "year": "2025",
+      "url": "https://github.com/ds825Diana/microrobot-pose-depth-estimation",
+      "title_en": "Microrobot Pose and Depth Estimation",
+      "title_zh": "微机器人姿态与深度估计系统",
+      "desc_en": "A visual perception system for microrobotics, implementing end-to-end prediction from monocular images to 6-DoF pose and depth based on the OTMR (Optical Tweezers Microrobot) dataset. Addressing challenges in micromanipulation scenes—including micron-scale robot size, complex lighting conditions, and high background noise—I designed a multi-task learning framework that simultaneously regresses position coordinates (x,y,z) and rotation quaternions.\nThe core contribution lies in exploring representation capabilities of different CNN architectures for micro-scale vision tasks: comparative analysis of baseline CNN, ResNet-18, and ResNet-50 backbones, achieving <5% depth estimation error under limited training data through grid search optimization of batch size and weight decay. The project validates the feasibility of lightweight networks in resource-constrained microscopic vision systems, laying groundwork for subsequent real-time micromanipulation feedback control.",
+      "desc_zh": "一个面向微尺度机器人的视觉感知系统，基于OTMR（Optical Tweezers Microrobot）数据集实现单目图像到6自由度位姿与深度的端到端预测。针对显微操作场景下微机器人尺寸微小（微米级）、光照条件复杂、背景噪声高的挑战，设计多任务学习框架同时回归位置坐标(x,y,z)与旋转姿态四元数。\n核心贡献在于探索了不同CNN架构在微尺度视觉任务中的表征能力：对比分析了基础CNN、ResNet-18与ResNet-50三种骨干网络，通过网格搜索优化批量大小与权重衰减等超参数，在有限训练数据下实现深度估计误差<5%的精度。项目验证了轻量级网络在资源受限的显微视觉系统中的可行性，为后续实时微操作反馈控制奠定基础。",
+      "stack": [
+        "PyTorch",
+        "CNN",
+        "Computer Vision",
+        "ResNet",
+        "6D Pose Estimation",
+        "Hyperparameter Tuning"
+      ]
+    },
+    {
+      "num": "01",
+      "year": "2024",
+      "url": "#",
+      "title_en": "Mouse Genome VNTR Variation Detection",
+      "title_zh": "小鼠基因组VNTR变异检测",
+      "desc_en": "A computer vision solution for high-throughput genomics data, designed for precise detection of Variable Number Tandem Repeat (VNTR) variations in mouse reference genomes. Addressing the low recognition rate of traditional bioinformatics methods in complex repetitive regions, I built a complete visual detection pipeline: from manual annotation of VNTR blocks to deep learning model training and deployment.\nCore contributions included designing block annotation protocols, constructing a training set of 262 samples, and training a YOLOv10 object detection model to screen high-confidence candidate regions. This methodological contribution was directly applied to a publication in Cell Genomics, providing critical technical support for resolving the structural complexity of high-quality mouse reference genomes. The project demonstrates the transfer value of computer vision methods in bioinformatics—adapting industrial-grade detection frameworks for \"visualized\" analysis of genomic sequences.",
+      "desc_zh": "面向高通量基因组学数据的计算机视觉解决方案，用于精准检测小鼠参考基因组中的可变数目串联重复序列（VNTR）变异。针对传统生物信息学方法在复杂重复区域识别率低的问题，构建了一套完整的视觉检测流程：从VNTR区块的人工标注到深度学习模型的训练部署。\n核心工作包括设计区块标注规范、构建262个样本的训练集，并基于YOLOv10训练目标检测模型筛选高置信度候选区域。该方法学贡献直接应用于Cell Genomics期刊论文的发表，为高质量小鼠参考基因组的结构复杂性解析提供了关键技术支持。项目展现了计算机视觉方法在生物信息学交叉领域的迁移价值——将工业级检测框架适配于基因组序列的\"视觉化\"分析。",
+      "stack": [
+        "YOLO",
+        "Genomic Data Visualization",
+        "Image Annotation",
+        "Deep Learning"
+      ]
+    },
+    {
+      "num": "02",
+      "year": "2025",
+      "url": "#",
+      "title_en": "Highway UAV Intelligent Inspection",
+      "title_zh": "高速公路智能无人机巡检",
+      "desc_en": "An end-to-end AI system deployment project for infrastructure inspection, building a full-stack \"hardware-platform-network\" architecture from scratch. Addressing pain points in traditional highway manual inspection—low efficiency, high risk, and high miss rates—I completed customer requirements research, system architecture design, and production deployment within one month, enabling automated UAV cruising and intelligent defect detection.\nCore contributions included constructing an anomaly mining pipeline based on ~3,000 flight logs, identifying 7 recurring failure patterns through data-driven methods to establish predictive maintenance capabilities; simultaneously optimizing YOLO detection model accuracy for highway scenarios, improving defect detection accuracy by 9%. The project validates rapid engineering capabilities—completing full-cycle delivery from requirements alignment to production deployment in 30 days, demonstrating the scalable application potential of AI perception technology in industrial inspection domains.",
+      "desc_zh": "面向基础设施巡检场景的端到端AI系统落地项目，从零到一构建\"硬件-平台-网络\"全栈架构。针对高速公路传统人工巡检效率低、危险性高、漏检率高的痛点，一个月内完成客户需求调研、系统架构设计与部署上线，实现无人机自动化巡航与智能缺陷检测。\n核心贡献在于构建基于约3000条飞行日志的异常挖掘流水线，通过数据驱动方法识别出7类重复出现的故障模式，建立预测性维护能力；同时优化YOLO检测模型在高速公路场景下的精度，将缺陷检测准确率提升9%。项目验证了快速工程化能力——30天内完成从需求对接到生产环境部署的全流程，展现了AI感知技术在工业巡检领域的规模化应用潜力。",
+      "stack": [
+        "UAV System Architecture",
+        "Anomaly Detection",
+        "Edge Deployment",
+        "Project Management"
+      ]
+    },
+    {
+      "num": "05",
+      "year": "2026",
+      "url": "#",
+      "title_en": "Multimodal Perception Autonomous Navigation Robot",
+      "title_zh": " 多模态感知自主导航机器人系统",
+      "desc_en": "Imperial College London ELEC70120 culminated project, building a complete indoor autonomous driving robot system integrating 2D vision, depth estimation, path planning, and imitation learning to achieve perception-decision-control闭环 in complex scenarios. Developed on the JetAcker platform (Jetson Nano + A1 LiDAR + Orbbec AstraProPlus) under ROS Melodic framework with modular software architecture.\nCore subsystems include: (1) Waypoint Navigation: Zero-collision trajectory tracking based on AMCL localization and TEB local planner, with YAML-driven waypoint collection and following toolchain supporting dynamic obstacle avoidance and loop mode; (2) YOLO Visual Perception: Dual-detector architecture (traffic signs + lights) with bounding-box-area-based distance proxy mechanism to solve small-target long-range false triggering, decoupled from navigation via ROS Topics; (3) LfD Intelligent Parking: Learning from Demonstration implementation collecting 5 human demonstrations, replaying via nearest-neighbor strategy to complete autonomous parking in narrow parking scenarios where traditional planners fail.\nSystem highlights include state-machine-driven behavioral decision-making and multimodal fault recovery mechanisms, with robust solutions for Python 2/3 mixed environments, move_base/LfD controller conflicts, and Jetson over-current issues. Full-stack deployment validated on physical platform.",
+      "desc_zh": " 帝国理工学院ELEC70120课程 culminated project，构建了一套完整的室内自主驾驶机器人系统，融合2D视觉、深度估计、路径规划与模仿学习，实现复杂场景下的感知-决策-控制闭环。基于JetAcker机器人平台（Jetson Nano + A1 LiDAR + Orbbec AstraProPlus），在ROS Melodic框架下开发模块化软件架构。\n核心子系统包括：(1) Waypoints导航：基于AMCL定位与TEB局部规划器实现零碰撞轨迹跟踪，开发YAML驱动航点采集与跟随工具链，支持动态避障与循环模式；(2) YOLO视觉感知：部署双检测器架构（交通标志+信号灯），基于边界框面积设计距离代理机制，解决小目标远距离误触发问题，与导航模块通过ROS Topic解耦通信；(3) LfD智能泊车：实现Learning from Demonstration模仿学习，通过5次人工示教采集轨迹，采用最近邻策略回放完成自主泊车，解决狭窄车位场景下传统规划器失效难题。\n系统亮点在于状态机驱动的行为决策与多模态故障恢复机制，针对Python 2/3混合环境、move_base与LfD控制器冲突、Jetson过流等工程挑战提出鲁棒解决方案，最终在物理平台完成全栈部署验证。",
+      "stack": [
+        "ROS",
+        "AMCL",
+        "YOLO",
+        "Learning from Demonstration",
+        "State Machine",
+        "Multimodal Fusion",
+        "Edge Computing"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "label_en": "Programming & Development",
+      "label_zh": "编程与开发",
+      "tags": [
+        {
+          "t": "Python",
+          "f": 0
+        },
+        {
+          "t": "C++",
+          "f": 1
+        },
+        {
+          "t": "Bash",
+          "f": 0
+        },
+        {
+          "t": "Linux",
+          "f": 0
+        },
+        {
+          "t": "Git",
+          "f": 0
+        },
+        {
+          "t": "Flask",
+          "f": 0
+        }
+      ]
+    },
+    {
+      "label_en": "Robotics & Systems",
+      "label_zh": "机器人与系统",
+      "tags": [
+        {
+          "t": "ROS",
+          "f": 0
+        },
+        {
+          "t": "AMCL",
+          "f": 0
+        },
+        {
+          "t": "Sensor",
+          "f": 0
+        },
+        {
+          "t": "Sensor Calibration",
+          "f": 0
+        },
+        {
+          "t": "Embedded Systems",
+          "f": 0
+        },
+        {
+          "t": "SLAM",
+          "f": 0
+        },
+        {
+          "t": "Edge Deployment",
+          "f": 0
+        }
+      ]
+    },
+    {
+      "label_en": "Deep Learning & Machine Learning",
+      "label_zh": "深度学习与机器学习",
+      "tags": [
+        {
+          "t": "PyTorch",
+          "f": 0
+        },
+        {
+          "t": "YOLO",
+          "f": 0
+        },
+        {
+          "t": "CNN/ResNet",
+          "f": 0
+        },
+        {
+          "t": "Object Detection",
+          "f": 0
+        },
+        {
+          "t": "Multimodal Fusion",
+          "f": 0
+        },
+        {
+          "t": "Point Cloud Processing",
+          "f": 0
+        },
+        {
+          "t": "Model Quantization",
+          "f": 0
+        }
+      ]
+    }
+  ]
+}

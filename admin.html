@@ -1,0 +1,680 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Portfolio Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #0e0f1a; --bg2: #13152a; --surface: #181a30;
+      --border: #252742; --border2: #323560;
+      --text: #e8e4f5; --muted: #6b6d9a; --dim: #3a3c5e;
+      --purple: #a78bfa; --blue: #6ab4ff; --pink: #f472b6;
+      --green: #4ade80; --red: #f87171;
+      --mono: 'Space Mono', monospace;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: var(--mono); font-size: 13px; line-height: 1.6; }
+
+    /* ── Layout ── */
+    .shell { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; }
+
+    /* ── Sidebar ── */
+    aside {
+      background: var(--bg2); border-right: 1px solid var(--border);
+      padding: 28px 0; display: flex; flex-direction: column;
+    }
+    .sidebar-logo { padding: 0 24px 24px; font-size: 13px; color: var(--purple); border-bottom: 1px solid var(--border); }
+    .sidebar-logo span { color: var(--muted); }
+    nav.side { padding: 16px 0; flex: 1; }
+    .nav-item {
+      display: block; padding: 10px 24px; color: var(--muted);
+      text-decoration: none; font-size: 12px; letter-spacing: .08em;
+      cursor: pointer; transition: all .15s; border: none; background: none;
+      width: 100%; text-align: left;
+    }
+    .nav-item::before { content: '> '; color: var(--dim); }
+    .nav-item:hover { color: var(--purple); background: rgba(167,139,250,.05); }
+    .nav-item.active { color: var(--purple); background: rgba(167,139,250,.1); }
+
+    .sidebar-footer { padding: 16px 24px; border-top: 1px solid var(--border); }
+    .preview-link { display: block; font-size: 11px; color: var(--blue); text-decoration: none; letter-spacing: .08em; }
+    .preview-link:hover { opacity: .7; }
+
+    /* ── Main ── */
+    main { padding: 40px 48px; overflow-y: auto; }
+    .page { display: none; }
+    .page.active { display: block; }
+
+    h1 { font-size: 18px; font-weight: 700; margin-bottom: 4px; color: var(--text); }
+    .page-sub { font-size: 11px; color: var(--muted); margin-bottom: 36px; letter-spacing: .06em; }
+
+    /* ── Card ── */
+    .card { background: var(--surface); border: 1px solid var(--border); padding: 28px; margin-bottom: 20px; }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .card-title { font-size: 12px; color: var(--blue); letter-spacing: .12em; }
+
+    /* ── Form elements ── */
+    .field { margin-bottom: 18px; }
+    label { display: block; font-size: 11px; color: var(--muted); letter-spacing: .1em; margin-bottom: 6px; }
+    input[type=text], input[type=url], input[type=number], textarea, select {
+      width: 100%; background: var(--bg); border: 1px solid var(--border2);
+      color: var(--text); font-family: var(--mono); font-size: 13px;
+      padding: 9px 12px; outline: none; transition: border-color .2s;
+    }
+    input:focus, textarea:focus { border-color: var(--purple); }
+    textarea { resize: vertical; min-height: 80px; }
+
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field-row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+    /* ── Buttons ── */
+    .btn { padding: 9px 18px; font-family: var(--mono); font-size: 11px; letter-spacing: .1em; cursor: pointer; transition: all .2s; border: 1px solid; }
+    .btn-primary { background: var(--purple); color: var(--bg); border-color: var(--purple); }
+    .btn-primary:hover { background: transparent; color: var(--purple); }
+    .btn-danger  { background: transparent; color: var(--red); border-color: var(--red); }
+    .btn-danger:hover  { background: rgba(248,113,113,.1); }
+    .btn-ghost   { background: transparent; color: var(--muted); border-color: var(--border2); }
+    .btn-ghost:hover   { color: var(--text); border-color: var(--text); }
+    .btn-green   { background: transparent; color: var(--green); border-color: var(--green); }
+    .btn-green:hover   { background: rgba(74,222,128,.1); }
+    .btn-sm { padding: 5px 11px; font-size: 10px; }
+
+    /* ── Project list ── */
+    .project-item {
+      background: var(--bg2); border: 1px solid var(--border); padding: 16px 20px;
+      margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;
+    }
+    .project-item-title { font-size: 13px; color: var(--text); }
+    .project-item-sub   { font-size: 11px; color: var(--muted); margin-top: 2px; }
+    .project-item-actions { display: flex; gap: 8px; }
+
+    /* ── Tag editor ── */
+    .tag-input-wrap { display: flex; gap: 8px; margin-bottom: 10px; }
+    .tag-input-wrap input { flex: 1; }
+    .tags-display { display: flex; flex-wrap: wrap; gap: 6px; min-height: 28px; }
+    .tag-chip {
+      padding: 3px 10px; border: 1px solid var(--border2); font-size: 11px;
+      color: var(--muted); display: flex; align-items: center; gap: 6px;
+    }
+    .tag-chip .rm { color: var(--red); cursor: pointer; font-size: 14px; line-height: 1; }
+    .tag-chip.ft { border-color: rgba(167,139,250,.4); color: rgba(167,139,250,.9); }
+
+    /* ── Toast ── */
+    #toast {
+      position: fixed; bottom: 28px; right: 28px;
+      background: var(--surface); border: 1px solid var(--border2);
+      padding: 12px 20px; font-size: 12px; color: var(--green);
+      opacity: 0; transition: opacity .3s; pointer-events: none; z-index: 999;
+    }
+    #toast.show { opacity: 1; }
+
+    /* ── Status bar ── */
+    .status-bar {
+      position: fixed; bottom: 0; left: 220px; right: 0;
+      background: var(--bg2); border-top: 1px solid var(--border);
+      padding: 6px 24px; display: flex; justify-content: space-between;
+      font-size: 10px; color: var(--dim); letter-spacing: .08em;
+    }
+    .status-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; margin-right: 6px; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(14,15,26,.85);
+      display: flex; align-items: center; justify-content: center; z-index: 500;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border2);
+      padding: 32px; width: min(620px,90vw); max-height: 88vh; overflow-y: auto;
+    }
+    .modal-title { font-size: 14px; color: var(--purple); margin-bottom: 24px; letter-spacing: .08em; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border); }
+  </style>
+</head>
+<body>
+
+<div class="shell">
+  <!-- ── Sidebar ── -->
+  <aside>
+    <div class="sidebar-logo">ADMIN<span>.panel</span></div>
+    <nav class="side">
+      <button class="nav-item active" onclick="showPage('overview')">overview</button>
+      <button class="nav-item" onclick="showPage('meta')">profile &amp; meta</button>
+      <button class="nav-item" onclick="showPage('projects')">projects</button>
+      <button class="nav-item" onclick="showPage('skills')">skills</button>
+      <button class="nav-item" onclick="showPage('export')">export / deploy</button>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="index.html" target="_blank" class="preview-link">↗ preview site</a>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main>
+
+    <!-- Overview -->
+    <div class="page active" id="page-overview">
+      <h1>Dashboard</h1>
+      <p class="page-sub">PORTFOLIO CONTENT MANAGER</p>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px">
+        <div class="card" style="padding:20px">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:8px">PROJECTS</div>
+          <div style="font-size:28px;font-weight:700;color:var(--purple)" id="ov-proj-count">0</div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:8px">SKILL CATEGORIES</div>
+          <div style="font-size:28px;font-weight:700;color:var(--blue)" id="ov-skill-count">0</div>
+        </div>
+        <div class="card" style="padding:20px">
+          <div style="font-size:10px;color:var(--muted);letter-spacing:.1em;margin-bottom:8px">LAST SAVED</div>
+          <div style="font-size:13px;color:var(--green)" id="ov-saved">—</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">QUICK ACTIONS</span></div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-primary" onclick="showPage('projects')">+ Add Project</button>
+          <button class="btn btn-ghost" onclick="showPage('skills')">Edit Skills</button>
+          <button class="btn btn-green" onclick="saveAndExport()">Save &amp; Export JSON</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Meta / Profile -->
+    <div class="page" id="page-meta">
+      <h1>Profile &amp; Meta</h1>
+      <p class="page-sub">PERSONAL INFO &amp; SITE SETTINGS</p>
+      <div class="card">
+        <div class="field-row">
+          <div class="field">
+            <label>NAME (EN)</label>
+            <input type="text" id="meta-name-en" placeholder="Your Name"/>
+          </div>
+          <div class="field">
+            <label>NAME (ZH 中文名)</label>
+            <input type="text" id="meta-name-zh" placeholder="你的名字"/>
+          </div>
+        </div>
+        <div class="field-row3">
+          <div class="field">
+            <label>INITIALS (for nav logo)</label>
+            <input type="text" id="meta-initials" placeholder="YN" maxlength="4"/>
+          </div>
+          <div class="field">
+            <label>PROJECTS COUNT</label>
+            <input type="text" id="meta-proj-count" placeholder="6+"/>
+          </div>
+          <div class="field">
+            <label>YEARS EXPERIENCE</label>
+            <input type="text" id="meta-years" placeholder="3"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>CITY (EN)</label>
+            <input type="text" id="meta-city-en" placeholder="London"/>
+          </div>
+          <div class="field">
+            <label>CITY (ZH)</label>
+            <input type="text" id="meta-city-zh" placeholder="伦敦"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>EMAIL</label>
+            <input type="text" id="meta-email" placeholder="your@email.com"/>
+          </div>
+          <div class="field">
+            <label>DEGREE (EN)</label>
+            <input type="text" id="meta-degree-en" placeholder="MSc Computer Science"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>UNIVERSITY (EN)</label>
+            <input type="text" id="meta-uni-en" placeholder="Your University"/>
+          </div>
+          <div class="field">
+            <label>UNIVERSITY (ZH)</label>
+            <input type="text" id="meta-uni-zh" placeholder="你的大学"/>
+          </div>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>GITHUB URL</label>
+            <input type="url" id="meta-github" placeholder="https://github.com/handle"/>
+          </div>
+          <div class="field">
+            <label>LINKEDIN URL</label>
+            <input type="url" id="meta-linkedin" placeholder="https://linkedin.com/in/profile"/>
+          </div>
+        </div>
+        <div class="field">
+          <label>BIO (EN)</label>
+          <textarea id="meta-bio-en" rows="3" placeholder="I build intelligent systems..."></textarea>
+        </div>
+        <div class="field">
+          <label>BIO (ZH)</label>
+          <textarea id="meta-bio-zh" rows="3" placeholder="我构建..."></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="saveMeta()">Save Profile</button>
+      </div>
+    </div>
+
+    <!-- Projects -->
+    <div class="page" id="page-projects">
+      <h1>Projects</h1>
+      <p class="page-sub">MANAGE YOUR FEATURED WORK</p>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
+        <button class="btn btn-primary" onclick="openProjectModal()">+ New Project</button>
+      </div>
+      <div id="projects-admin-list"></div>
+    </div>
+
+    <!-- Skills -->
+    <div class="page" id="page-skills">
+      <h1>Skills</h1>
+      <p class="page-sub">MANAGE SKILL CATEGORIES &amp; TAGS</p>
+      <div id="skills-admin"></div>
+      <button class="btn btn-ghost" style="margin-top:12px" onclick="addSkillCat()">+ Add Category</button>
+    </div>
+
+    <!-- Export -->
+    <div class="page" id="page-export">
+      <h1>Export / Deploy</h1>
+      <p class="page-sub">PUBLISH YOUR CONTENT</p>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">OPTION 1 — LOCAL FILE (GITHUB PAGES)</span></div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:18px">
+          Download <code style="color:var(--blue)">content.json</code> and place it next to <code style="color:var(--blue)">index.html</code>.
+          The site reads it on load. Push to GitHub to deploy.
+        </p>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-green" onclick="saveAndExport()">Download content.json</button>
+          <button class="btn btn-ghost" onclick="copyJSON()">Copy JSON</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">OPTION 2 — SUPABASE (DYNAMIC, FREE TIER)</span></div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.8;margin-bottom:18px">
+          Store content in Supabase. The site fetches it live — no redeployment needed after edits.
+          Create a free project at <code style="color:var(--blue)">supabase.com</code>, then fill in credentials below.
+        </p>
+        <div class="field-row">
+          <div class="field">
+            <label>SUPABASE PROJECT URL</label>
+            <input type="text" id="sb-url" placeholder="https://xxxx.supabase.co"/>
+          </div>
+          <div class="field">
+            <label>ANON KEY</label>
+            <input type="text" id="sb-key" placeholder="eyJhbGciOiJIUzI1..."/>
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveToSupabase()">Save to Supabase</button>
+        <span id="sb-status" style="margin-left:14px;font-size:11px;color:var(--muted)"></span>
+      </div>
+
+      <div class="card">
+        <div class="card-header"><span class="card-title">CURRENT JSON PREVIEW</span></div>
+        <pre id="json-preview" style="font-size:11px;color:var(--muted);overflow-x:auto;white-space:pre-wrap;max-height:300px;overflow-y:auto"></pre>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Project Modal -->
+<div class="modal-overlay" id="projectModal">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">NEW PROJECT</div>
+    <input type="hidden" id="edit-proj-idx" value="-1"/>
+    <div class="field-row3">
+      <div class="field">
+        <label>NUMBER</label>
+        <input type="text" id="p-num" placeholder="01"/>
+      </div>
+      <div class="field">
+        <label>YEAR</label>
+        <input type="text" id="p-year" placeholder="2024"/>
+      </div>
+      <div class="field">
+        <label>URL (optional)</label>
+        <input type="url" id="p-url" placeholder="https://github.com/..."/>
+      </div>
+    </div>
+    <div class="field-row">
+      <div class="field">
+        <label>TITLE (EN)</label>
+        <input type="text" id="p-title-en" placeholder="Project name"/>
+      </div>
+      <div class="field">
+        <label>TITLE (ZH)</label>
+        <input type="text" id="p-title-zh" placeholder="项目名称"/>
+      </div>
+    </div>
+    <div class="field">
+      <label>DESCRIPTION (EN)</label>
+      <textarea id="p-desc-en" rows="3" placeholder="What you built, key metrics, impact..."></textarea>
+    </div>
+    <div class="field">
+      <label>DESCRIPTION (ZH)</label>
+      <textarea id="p-desc-zh" rows="3" placeholder="项目描述..."></textarea>
+    </div>
+    <div class="field">
+      <label>TECH STACK (press Enter to add)</label>
+      <div class="tag-input-wrap">
+        <input type="text" id="stack-input" placeholder="e.g. PyTorch" onkeydown="if(event.key==='Enter'){addStackTag();event.preventDefault();}"/>
+        <button class="btn btn-ghost btn-sm" onclick="addStackTag()">Add</button>
+      </div>
+      <div class="tags-display" id="stack-tags"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast">✓ Saved</div>
+<div class="status-bar">
+  <span><span class="status-dot" style="background:var(--green)"></span>ADMIN PANEL v1.0</span>
+  <span id="status-time"></span>
+</div>
+
+<script>
+/* ══ State ══ */
+let state = {
+  meta: {
+    name_en:'', name_zh:'', initials:'YN', project_count:'6+', years_exp:'3',
+    city_en:'', city_zh:'', email:'', degree_en:'', uni_en:'', uni_zh:'',
+    github:'', linkedin:'', bio_en:'', bio_zh:''
+  },
+  projects: [],
+  skills: []
+};
+let stackTags = [];
+
+/* ══ Init ══ */
+window.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('portfolio_content');
+  if (saved) {
+    try { state = JSON.parse(saved); } catch {}
+  } else {
+    state.skills = [
+      { label_en:"ML / DL",  label_zh:"机器学习", tags:[{t:"PyTorch",f:1},{t:"TensorFlow",f:1},{t:"scikit-learn"},{t:"Transformers"}] },
+      { label_en:"Data",     label_zh:"数据处理", tags:[{t:"Python",f:1},{t:"Pandas"},{t:"NumPy"},{t:"SQL"}] },
+      { label_en:"Infra",    label_zh:"基础设施", tags:[{t:"Docker",f:1},{t:"AWS"},{t:"MLflow"},{t:"FastAPI"}] },
+      { label_en:"Research", label_zh:"研究方向", tags:[{t:"NLP",f:1},{t:"Computer Vision",f:1},{t:"RAG"}] },
+    ];
+    state.projects = [
+      { num:"01", title_en:"LLM Fine-tuning Pipeline", title_zh:"大语言模型微调流水线", desc_en:"End-to-end fine-tuning pipeline.", desc_zh:"端到端微调流水线。", stack:["PyTorch","LoRA"], year:"2024", url:"#" }
+    ];
+  }
+  renderAll();
+  updateClock();
+  setInterval(updateClock, 1000);
+});
+
+function updateClock() {
+  document.getElementById('status-time').textContent = new Date().toLocaleTimeString();
+}
+
+/* ══ Navigation ══ */
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelector(`[onclick="showPage('${id}')"]`).classList.add('active');
+  if (id === 'export') refreshJSONPreview();
+}
+
+/* ══ Render all ══ */
+function renderAll() {
+  renderOverview();
+  renderMeta();
+  renderProjectsList();
+  renderSkillsAdmin();
+}
+
+function renderOverview() {
+  document.getElementById('ov-proj-count').textContent  = state.projects.length;
+  document.getElementById('ov-skill-count').textContent = state.skills.length;
+  const ts = localStorage.getItem('last_saved');
+  document.getElementById('ov-saved').textContent = ts ? new Date(ts).toLocaleString() : '—';
+}
+
+/* ══ Meta ══ */
+function renderMeta() {
+  const m = state.meta;
+  const fields = ['name-en','name-zh','initials','proj-count','years','city-en','city-zh','email','degree-en','uni-en','uni-zh','github','linkedin','bio-en','bio-zh'];
+  const keys   = ['name_en','name_zh','initials','project_count','years_exp','city_en','city_zh','email','degree_en','uni_en','uni_zh','github','linkedin','bio_en','bio_zh'];
+  fields.forEach((f,i)=>{
+    const el = document.getElementById('meta-'+f);
+    if(el) el.value = m[keys[i]]||'';
+  });
+}
+
+function saveMeta() {
+  const fields = ['name-en','name-zh','initials','proj-count','years','city-en','city-zh','email','degree-en','uni-en','uni-zh','github','linkedin','bio-en','bio-zh'];
+  const keys   = ['name_en','name_zh','initials','project_count','years_exp','city_en','city_zh','email','degree_en','uni_en','uni_zh','github','linkedin','bio_en','bio_zh'];
+  fields.forEach((f,i)=>{
+    const el = document.getElementById('meta-'+f);
+    if(el) state.meta[keys[i]] = el.value;
+  });
+  persist(); showToast('Profile saved');
+}
+
+/* ══ Projects ══ */
+function renderProjectsList() {
+  const el = document.getElementById('projects-admin-list');
+  if (!state.projects.length) { el.innerHTML = '<p style="color:var(--muted);font-size:12px">No projects yet. Click "+ New Project".</p>'; return; }
+  el.innerHTML = state.projects.map((p,i)=>`
+    <div class="project-item">
+      <div>
+        <div class="project-item-title">${p.num} — ${p.title_en}</div>
+        <div class="project-item-sub">${p.title_zh} · ${p.year} · ${(p.stack||[]).join(', ')}</div>
+      </div>
+      <div class="project-item-actions">
+        <button class="btn btn-ghost btn-sm" onclick="editProject(${i})">Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteProject(${i})">Del</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openProjectModal(idx) {
+  idx = idx === undefined ? -1 : idx;
+  document.getElementById('edit-proj-idx').value = idx;
+  document.getElementById('modal-title').textContent = idx < 0 ? 'NEW PROJECT' : 'EDIT PROJECT';
+  stackTags = [];
+  if (idx >= 0) {
+    const p = state.projects[idx];
+    document.getElementById('p-num').value      = p.num||'';
+    document.getElementById('p-year').value     = p.year||'';
+    document.getElementById('p-url').value      = p.url||'';
+    document.getElementById('p-title-en').value = p.title_en||'';
+    document.getElementById('p-title-zh').value = p.title_zh||'';
+    document.getElementById('p-desc-en').value  = p.desc_en||'';
+    document.getElementById('p-desc-zh').value  = p.desc_zh||'';
+    stackTags = [...(p.stack||[])];
+  } else {
+    ['p-num','p-year','p-url','p-title-en','p-title-zh','p-desc-en','p-desc-zh'].forEach(id=>{ document.getElementById(id).value=''; });
+  }
+  renderStackTags();
+  document.getElementById('projectModal').classList.add('open');
+}
+
+function editProject(i) { openProjectModal(i); }
+
+function deleteProject(i) {
+  if (!confirm('Delete this project?')) return;
+  state.projects.splice(i,1);
+  renderProjectsList(); renderOverview(); persist();
+}
+
+function closeModal() { document.getElementById('projectModal').classList.remove('open'); }
+
+function addStackTag() {
+  const inp = document.getElementById('stack-input');
+  const val = inp.value.trim();
+  if (val && !stackTags.includes(val)) { stackTags.push(val); renderStackTags(); }
+  inp.value = '';
+}
+
+function removeStackTag(i) { stackTags.splice(i,1); renderStackTags(); }
+
+function renderStackTags() {
+  document.getElementById('stack-tags').innerHTML = stackTags.map((t,i)=>
+    `<span class="tag-chip">${t}<span class="rm" onclick="removeStackTag(${i})">×</span></span>`
+  ).join('');
+}
+
+function saveProject() {
+  const idx = parseInt(document.getElementById('edit-proj-idx').value);
+  const p = {
+    num:      document.getElementById('p-num').value||String(state.projects.length+1).padStart(2,'0'),
+    year:     document.getElementById('p-year').value||new Date().getFullYear(),
+    url:      document.getElementById('p-url').value||'#',
+    title_en: document.getElementById('p-title-en').value,
+    title_zh: document.getElementById('p-title-zh').value,
+    desc_en:  document.getElementById('p-desc-en').value,
+    desc_zh:  document.getElementById('p-desc-zh').value,
+    stack:    [...stackTags],
+  };
+  if (idx < 0) state.projects.push(p);
+  else state.projects[idx] = p;
+  renderProjectsList(); renderOverview(); persist();
+  closeModal(); showToast('Project saved');
+}
+
+/* ══ Skills ══ */
+function renderSkillsAdmin() {
+  const el = document.getElementById('skills-admin');
+  el.innerHTML = state.skills.map((cat,ci)=>`
+    <div class="card" style="margin-bottom:12px">
+      <div class="card-header">
+        <span class="card-title">CATEGORY ${ci+1}</span>
+        <button class="btn btn-danger btn-sm" onclick="deleteSkillCat(${ci})">Remove</button>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>LABEL (EN)</label>
+          <input type="text" value="${cat.label_en}" oninput="state.skills[${ci}].label_en=this.value;persist()"/>
+        </div>
+        <div class="field">
+          <label>LABEL (ZH)</label>
+          <input type="text" value="${cat.label_zh}" oninput="state.skills[${ci}].label_zh=this.value;persist()"/>
+        </div>
+      </div>
+      <label style="margin-bottom:8px;display:block">TAGS (Enter to add)</label>
+      <div class="tag-input-wrap">
+        <input type="text" id="skill-inp-${ci}" placeholder="e.g. PyTorch"
+          onkeydown="if(event.key==='Enter'){addSkillTag(${ci});event.preventDefault();}"/>
+        <button class="btn btn-ghost btn-sm" onclick="addSkillTag(${ci})">Add</button>
+      </div>
+      <div class="tags-display" id="skill-tags-${ci}">
+        ${(cat.tags||[]).map((t,ti)=>`
+          <span class="tag-chip${t.f?' ft':''}">
+            ${t.t}
+            <span class="rm" onclick="removeSkillTag(${ci},${ti})">×</span>
+          </span>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function addSkillCat() {
+  state.skills.push({ label_en:'New Category', label_zh:'新分类', tags:[] });
+  renderSkillsAdmin(); persist();
+}
+
+function deleteSkillCat(ci) {
+  if (!confirm('Remove this category?')) return;
+  state.skills.splice(ci,1); renderSkillsAdmin(); persist();
+}
+
+function addSkillTag(ci) {
+  const inp = document.getElementById('skill-inp-'+ci);
+  const val = inp.value.trim();
+  if (!val) return;
+  if (!state.skills[ci].tags) state.skills[ci].tags = [];
+  state.skills[ci].tags.push({ t: val, f: state.skills[ci].tags.length < 2 ? 1 : 0 });
+  inp.value = '';
+  renderSkillsAdmin(); persist();
+}
+
+function removeSkillTag(ci, ti) {
+  state.skills[ci].tags.splice(ti,1); renderSkillsAdmin(); persist();
+}
+
+/* ══ Persist ══ */
+function persist() {
+  localStorage.setItem('portfolio_content', JSON.stringify(state));
+  localStorage.setItem('last_saved', new Date().toISOString());
+  renderOverview();
+}
+
+/* ══ Export ══ */
+function getJSON() { return JSON.stringify(state, null, 2); }
+
+function saveAndExport() {
+  const blob = new Blob([getJSON()], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'content.json';
+  a.click();
+  showToast('content.json downloaded');
+  persist();
+}
+
+function copyJSON() {
+  navigator.clipboard.writeText(getJSON());
+  showToast('JSON copied to clipboard');
+}
+
+function refreshJSONPreview() {
+  document.getElementById('json-preview').textContent = getJSON();
+}
+
+/* ══ Supabase ══ */
+async function saveToSupabase() {
+  const url = document.getElementById('sb-url').value.trim();
+  const key = document.getElementById('sb-key').value.trim();
+  const status = document.getElementById('sb-status');
+  if (!url || !key) { status.textContent = '⚠ Fill in URL and key'; status.style.color='var(--red)'; return; }
+  status.textContent = 'Saving...'; status.style.color = 'var(--muted)';
+  try {
+    const r = await fetch(`${url}/rest/v1/portfolio_content`, {
+      method: 'POST',
+      headers: {
+        'apikey': key, 'Authorization': 'Bearer '+key,
+        'Content-Type': 'application/json',
+        'Prefer': 'resolution=merge-duplicates'
+      },
+      body: JSON.stringify({ id: 1, data: state })
+    });
+    if (!r.ok) throw new Error(await r.text());
+    status.textContent = '✓ Saved to Supabase'; status.style.color = 'var(--green)';
+    localStorage.setItem('sb_url', url); localStorage.setItem('sb_key', key);
+    showToast('Saved to Supabase');
+  } catch(e) {
+    status.textContent = '✗ '+e.message; status.style.color='var(--red)';
+  }
+}
+
+/* ══ Toast ══ */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = '✓ '+msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+</script>
+</body>
+</html>

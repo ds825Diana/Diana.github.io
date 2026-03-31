@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Your Name · AI / ML Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg:       #0e0f1a;
+      --bg2:      #13152a;
+      --surface:  #181a30;
+      --border:   #252742;
+      --border2:  #323560;
+      --text:     #e8e4f5;
+      --muted:    #6b6d9a;
+      --dim:      #3a3c5e;
+      --purple:   #a78bfa;
+      --purple2:  #7c66e3;
+      --blue:     #6ab4ff;
+      --pink:     #f472b6;
+      --mono:     'Space Mono', monospace;
+      --serif:    'DM Serif Display', serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      line-height: 1.7;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── Grid bg ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(100,132,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(100,132,255,0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+    }
+
+    /* ── Cursor ── */
+    .cursor { width: 7px; height: 7px; background: var(--purple); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transition: transform .08s; }
+    .cursor-ring { width: 26px; height: 26px; border: 1px solid rgba(167,139,250,.35); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transition: width .2s, height .2s, opacity .2s; }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 20px 52px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: linear-gradient(to bottom, rgba(14,15,26,.97), transparent);
+    }
+    .nav-logo { font-size: 13px; color: var(--purple); text-decoration: none; letter-spacing: .1em; }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display: flex; gap: 28px; list-style: none; align-items: center; }
+    .nav-links a { color: var(--muted); text-decoration: none; font-size: 12px; letter-spacing: .08em; transition: color .2s; cursor: none; }
+    .nav-links a:hover { color: var(--purple); }
+
+    /* lang toggle */
+    .lang-btn {
+      padding: 5px 12px; border: 1px solid var(--border2); background: transparent;
+      color: var(--muted); font-family: var(--mono); font-size: 11px; letter-spacing: .1em;
+      cursor: none; transition: all .2s;
+    }
+    .lang-btn:hover, .lang-btn.active { border-color: var(--purple); color: var(--purple); background: rgba(167,139,250,.07); }
+
+    /* ── Hero ── */
+    #hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 52px 80px; position: relative; z-index: 2; }
+    .hero-inner { max-width: 860px; }
+
+    .hero-tag { font-size: 11px; color: var(--blue); letter-spacing: .2em; margin-bottom: 24px; opacity: 0; animation: fadeUp .6s .2s forwards; }
+    .hero-tag::before { content: '> '; color: var(--dim); }
+
+    .hero-name { font-family: var(--serif); font-size: clamp(54px,8.5vw,108px); line-height: 1.0; letter-spacing: -.02em; margin-bottom: 16px; opacity: 0; animation: fadeUp .7s .35s forwards; }
+    .hero-name .accent { color: var(--purple); font-style: italic; }
+
+    .hero-title { font-size: clamp(12px,1.4vw,15px); color: var(--muted); letter-spacing: .14em; margin-bottom: 48px; opacity: 0; animation: fadeUp .6s .5s forwards; }
+
+    .hero-bio { max-width: 500px; font-size: 15px; line-height: 1.95; color: rgba(232,228,245,.65); margin-bottom: 48px; opacity: 0; animation: fadeUp .6s .65s forwards; }
+
+    .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; animation: fadeUp .6s .8s forwards; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 11px 22px; font-family: var(--mono); font-size: 12px; letter-spacing: .1em; text-decoration: none; cursor: none; transition: all .2s; }
+    .btn-primary { background: var(--purple); color: #0e0f1a; border: 1px solid var(--purple); }
+    .btn-primary:hover { background: transparent; color: var(--purple); }
+    .btn-ghost { background: transparent; color: var(--text); border: 1px solid var(--border2); }
+    .btn-ghost:hover { border-color: var(--pink); color: var(--pink); }
+
+    .hero-stats { position: absolute; right: 52px; bottom: 80px; display: flex; flex-direction: column; gap: 28px; opacity: 0; animation: fadeIn .8s 1s forwards; }
+    .stat { text-align: right; }
+    .stat-num { font-family: var(--serif); font-size: 34px; line-height: 1; color: var(--purple); }
+    .stat-label { font-size: 10px; color: var(--muted); letter-spacing: .12em; }
+
+    /* ── Sections ── */
+    section { padding: 110px 52px; position: relative; z-index: 2; }
+    .section-header { margin-bottom: 60px; }
+    .section-tag { font-size: 11px; color: var(--pink); letter-spacing: .2em; margin-bottom: 12px; }
+    .section-tag::before { content: '// '; color: var(--dim); }
+    .section-title { font-family: var(--serif); font-size: clamp(34px,5vw,54px); line-height: 1.1; }
+
+    /* ── About ── */
+    #about { border-top: 1px solid var(--border); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: start; }
+    .about-text p { font-size: 15px; line-height: 1.95; color: rgba(232,228,245,.68); margin-bottom: 18px; }
+    .about-hl { color: var(--purple); font-style: italic; }
+    .about-links { display: flex; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+    .icon-link { display: inline-flex; align-items: center; gap: 7px; padding: 7px 14px; border: 1px solid var(--border2); color: var(--muted); text-decoration: none; font-size: 11px; letter-spacing: .1em; transition: all .2s; cursor: none; }
+    .icon-link:hover { border-color: var(--purple); color: var(--purple); }
+
+    /* terminal card */
+    .about-terminal { background: var(--surface); border: 1px solid var(--border); overflow: hidden; }
+    .t-bar { padding: 11px 16px; background: var(--bg2); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 7px; }
+    .t-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .t-body { padding: 22px; font-size: 13px; }
+    .t-line { margin-bottom: 7px; }
+    .t-prompt { color: var(--purple); }
+    .t-cmd { color: var(--text); }
+    .t-out { color: var(--muted); padding-left: 14px; }
+    .t-key { color: var(--pink); }
+    .t-val { color: var(--blue); }
+    .t-cursor { display: inline-block; width: 8px; height: 13px; background: var(--purple); animation: blink 1s step-end infinite; vertical-align: middle; }
+
+    /* ── Skills ── */
+    #skills { border-top: 1px solid var(--border); }
+    .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); border: 1px solid var(--border); }
+    .skill-cat { padding: 30px; background: var(--surface); border-right: 1px solid var(--border); transition: background .2s; }
+    .skill-cat:hover { background: var(--bg2); }
+    .skill-cat:last-child { border-right: none; }
+    .skill-cat-label { font-size: 10px; color: var(--blue); letter-spacing: .18em; margin-bottom: 18px; display: flex; align-items: center; gap: 8px; }
+    .skill-cat-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 7px; }
+    .tag { padding: 4px 9px; border: 1px solid var(--border2); font-size: 11px; color: var(--muted); letter-spacing: .05em; transition: all .15s; }
+    .tag:hover { border-color: var(--pink); color: var(--pink); }
+    .tag.ft { border-color: rgba(167,139,250,.35); color: rgba(167,139,250,.85); }
+
+    /* ── Projects ── */
+    #projects { border-top: 1px solid var(--border); }
+    .projects-list { display: flex; flex-direction: column; gap: 2px; }
+
+    .project-card {
+      background: var(--surface); border: 1px solid var(--border);
+      padding: 36px 40px;
+      display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: start;
+      transition: border-color .2s, background .2s; text-decoration: none; color: inherit; cursor: none;
+    }
+    .project-card:hover { border-color: var(--purple2); background: #14162c; }
+    .project-card:hover .p-arrow { color: var(--purple); transform: translate(4px,-4px); }
+
+    .p-num { font-size: 11px; color: var(--dim); letter-spacing: .1em; margin-bottom: 14px; }
+    .p-title { font-family: var(--serif); font-size: clamp(20px,2.8vw,30px); margin-bottom: 10px; line-height: 1.2; }
+    .p-desc { font-size: 14px; color: rgba(232,228,245,.58); line-height: 1.85; max-width: 580px; margin-bottom: 18px; }
+    .p-stack { display: flex; flex-wrap: wrap; gap: 7px; }
+    .s-tag { padding: 3px 8px; background: rgba(106,180,255,.07); border: 1px solid rgba(106,180,255,.2); font-size: 10px; color: #7ab8ff; letter-spacing: .07em; }
+    .p-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+    .p-year { font-size: 11px; color: var(--muted); }
+    .p-arrow { font-size: 18px; color: var(--dim); transition: all .2s; }
+
+    /* ── Footer ── */
+    footer {
+      padding: 52px; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      position: relative; z-index: 2;
+    }
+    .footer-copy { font-size: 12px; color: var(--muted); }
+    .footer-email { font-size: 13px; color: var(--purple); text-decoration: none; letter-spacing: .05em; transition: opacity .2s; cursor: none; }
+    .footer-email:hover { opacity: .7; }
+
+    /* ── i18n hidden ── */
+    [data-lang="zh"] { display: none; }
+    body.zh [data-lang="en"] { display: none; }
+    body.zh [data-lang="zh"] { display: inline; }
+    /* block-level bilingual (for p tags etc) */
+    p[data-lang="zh"], div[data-lang="zh"], h1[data-lang="zh"], h2[data-lang="zh"] { display: none; }
+    body.zh p[data-lang="en"], body.zh div[data-lang="en"], body.zh h1[data-lang="en"], body.zh h2[data-lang="en"] { display: none; }
+    body.zh p[data-lang="zh"], body.zh div[data-lang="zh"], body.zh h1[data-lang="zh"], body.zh h2[data-lang="zh"] { display: block; }
+
+    /* ── Reveal ── */
+    .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── Animations ── */
+    @keyframes fadeUp { from { opacity:0; transform:translateY(18px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    @keyframes blink  { 0%,100% { opacity:1; } 50% { opacity:0; } }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 18px 22px; }
+      .nav-links li:not(:last-child) { display: none; }
+      #hero { padding: 100px 22px 60px; }
+      .hero-stats { display: none; }
+      section { padding: 80px 22px; }
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+      .project-card { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 14px; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- ── Nav ── -->
+<nav>
+  <a href="#hero" class="nav-logo">YN<span>.dev</span></a>
+  <ul class="nav-links">
+    <li><a href="#about"><span data-lang="en">about</span><span data-lang="zh">关于</span></a></li>
+    <li><a href="#skills"><span data-lang="en">skills</span><span data-lang="zh">技能</span></a></li>
+    <li><a href="#projects"><span data-lang="en">projects</span><span data-lang="zh">项目</span></a></li>
+    <li><a href="mailto:your@email.com"><span data-lang="en">contact</span><span data-lang="zh">联系</span></a></li>
+    <li>
+      <button class="lang-btn" id="langBtn" onclick="toggleLang()">中 / EN</button>
+    </li>
+  </ul>
+</nav>
+
+<!-- ── Hero ── -->
+<section id="hero">
+  <div class="hero-inner">
+    <p class="hero-tag">
+      <span data-lang="en">AI / ML ENGINEER &amp; RESEARCHER</span>
+      <span data-lang="zh">AI / 机器学习工程师 &amp; 研究员</span>
+    </p>
+    <h1 class="hero-name">
+      <span data-lang="en">Your<br><span class="accent">Name</span></span>
+      <span data-lang="zh" style="display:none">你的<br><span class="accent">名字</span></span>
+    </h1>
+    <p class="hero-title">
+      <span data-lang="en">MACHINE LEARNING · DATA SCIENCE · DEEP LEARNING</span>
+      <span data-lang="zh">机器学习 · 数据科学 · 深度学习</span>
+    </p>
+    <p class="hero-bio">
+      <span data-lang="en">I build intelligent systems that bridge research and production.
+      Passionate about making models that actually work in the real world —
+      from experimentation to deployment at scale.</span>
+      <span data-lang="zh">我构建连接研究与生产的智能系统，专注于将模型从实验阶段推进到大规模部署，让 AI 真正落地。</span>
+    </p>
+    <div class="hero-cta">
+      <a href="#projects" class="btn btn-primary">
+        <span data-lang="en">VIEW PROJECTS →</span>
+        <span data-lang="zh">查看项目 →</span>
+      </a>
+      <a href="resume.pdf" class="btn btn-ghost" target="_blank">
+        <span data-lang="en">RÉSUMÉ ↗</span>
+        <span data-lang="zh">简历 ↗</span>
+      </a>
+    </div>
+  </div>
+  <div class="hero-stats">
+    <div class="stat">
+      <div class="stat-num" id="stat-projects">6+</div>
+      <div class="stat-label"><span data-lang="en">PROJECTS</span><span data-lang="zh">项目</span></div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" id="stat-years">3</div>
+      <div class="stat-label"><span data-lang="en">YEARS EXP</span><span data-lang="zh">年经验</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── About ── -->
+<section id="about">
+  <div class="section-header reveal">
+    <p class="section-tag"><span data-lang="en">ABOUT ME</span><span data-lang="zh">关于我</span></p>
+    <h2 class="section-title">
+      <span data-lang="en">who I am</span>
+      <span data-lang="zh">我是谁</span>
+    </h2>
+  </div>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p data-lang="en">
+        Hi — I'm <span class="about-hl">Your Name</span>, an AI/ML engineer
+        based in [City]. Currently pursuing / completing my degree in [Field] at [University],
+        with a focus on deep learning and applied machine learning systems.
+      </p>
+      <p data-lang="zh">
+        你好 — 我是<span class="about-hl">你的名字</span>，一名位于[城市]的 AI/ML 工程师，
+        目前就读/毕业于[学校][专业]，专注于深度学习与机器学习系统的应用研究。
+      </p>
+      <p data-lang="en">
+        My work spans everything from building <span class="about-hl">NLP pipelines</span>
+        and training neural networks, to deploying scalable inference services.
+        I care about clean code, reproducible experiments, and models that generalize.
+      </p>
+      <p data-lang="zh">
+        我的工作涵盖构建 <span class="about-hl">NLP 流水线</span>、训练神经网络，
+        到部署可扩展的推理服务。我注重代码整洁、实验可复现，以及具备泛化能力的模型。
+      </p>
+      <p data-lang="en">
+        When I'm not training models, you'll find me reading papers,
+        contributing to open source, or exploring the intersection of AI and [your interest].
+      </p>
+      <p data-lang="zh">
+        不训练模型的时候，你能找到我在读论文、为开源项目做贡献，
+        或者探索 AI 与[你的兴趣]的交叉领域。
+      </p>
+      <div class="about-links">
+        <a href="https://github.com/yourhandle" class="icon-link" target="_blank">⌥ GitHub</a>
+        <a href="https://linkedin.com/in/yourprofile" class="icon-link" target="_blank">⌥ LinkedIn</a>
+        <a href="https://scholar.google.com" class="icon-link" target="_blank">⌥ Scholar</a>
+      </div>
+    </div>
+    <div class="about-terminal reveal">
+      <div class="t-bar">
+        <div class="t-dot" style="background:#ff5f57"></div>
+        <div class="t-dot" style="background:#ffbd2e"></div>
+        <div class="t-dot" style="background:#28ca42"></div>
+        <span style="margin-left:8px;font-size:11px;color:var(--dim)">profile.json</span>
+      </div>
+      <div class="t-body">
+        <div class="t-line"><span class="t-prompt">$ </span><span class="t-cmd">cat profile.json</span></div>
+        <div class="t-line t-out">{</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"name"</span>: <span class="t-val">"Your Name"</span>,</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"role"</span>: <span class="t-val">"<span data-lang='en'>ML Engineer</span><span data-lang='zh'>机器学习工程师</span>"</span>,</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"location"</span>: <span class="t-val">"<span data-lang='en'>Your City</span><span data-lang='zh'>你的城市</span>"</span>,</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"education"</span>: {</div>
+        <div class="t-line t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"degree"</span>: <span class="t-val">"<span data-lang='en'>MSc Computer Science</span><span data-lang='zh'>计算机科学硕士</span>"</span>,</div>
+        <div class="t-line t-out">&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-key">"uni"</span>: <span class="t-val">"<span data-lang='en'>Your University</span><span data-lang='zh'>你的大学</span>"</span></div>
+        <div class="t-line t-out">&nbsp;&nbsp;},</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"focus"</span>: [<span class="t-val">"LLMs"</span>, <span class="t-val">"CV"</span>, <span class="t-val">"RL"</span>],</div>
+        <div class="t-line t-out">&nbsp;&nbsp;<span class="t-key">"open_to_work"</span>: <span style="color:#a78bfa">true</span></div>
+        <div class="t-line t-out">}</div>
+        <div class="t-line" style="margin-top:12px"><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Skills ── -->
+<section id="skills">
+  <div class="section-header reveal">
+    <p class="section-tag"><span data-lang="en">TECHNICAL SKILLS</span><span data-lang="zh">技术栈</span></p>
+    <h2 class="section-title">
+      <span data-lang="en">what I work with</span>
+      <span data-lang="zh">我的工具箱</span>
+    </h2>
+  </div>
+  <div class="skills-grid reveal" id="skills-grid">
+    <!-- populated by JS from content.json or defaults below -->
+  </div>
+</section>
+
+<!-- ── Projects ── -->
+<section id="projects">
+  <div class="section-header reveal">
+    <p class="section-tag"><span data-lang="en">SELECTED WORK</span><span data-lang="zh">精选项目</span></p>
+    <h2 class="section-title">
+      <span data-lang="en">projects</span>
+      <span data-lang="zh">项目</span>
+    </h2>
+  </div>
+  <div class="projects-list reveal" id="projects-list">
+    <!-- populated by JS -->
+  </div>
+</section>
+
+<!-- ── Footer ── -->
+<footer>
+  <p class="footer-copy">
+    <span data-lang="en">© 2025 Your Name — pure HTML/CSS/JS</span>
+    <span data-lang="zh">© 2025 你的名字 — 纯 HTML/CSS/JS 构建</span>
+  </p>
+  <a href="mailto:your@email.com" class="footer-email">your@email.com</a>
+</footer>
+
+<script>
+/* ══ Language toggle ══ */
+let lang = localStorage.getItem('lang') || 'en';
+function applyLang(l) {
+  lang = l;
+  document.body.classList.toggle('zh', l === 'zh');
+  document.getElementById('langBtn').textContent = l === 'zh' ? 'EN' : '中文';
+  localStorage.setItem('lang', l);
+}
+function toggleLang() { applyLang(lang === 'en' ? 'zh' : 'en'); }
+applyLang(lang);
+
+/* ══ Cursor ══ */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{ mx=e.clientX; my=e.clientY; });
+(function loop(){
+  rx += (mx-rx)*.14; ry += (my-ry)*.14;
+  cur.style.transform  = `translate(${mx-3.5}px,${my-3.5}px)`;
+  ring.style.transform = `translate(${rx-13}px,${ry-13}px)`;
+  requestAnimationFrame(loop);
+})();
+document.querySelectorAll('a,button').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{ ring.style.width='40px';ring.style.height='40px';ring.style.opacity='.5'; });
+  el.addEventListener('mouseleave',()=>{ ring.style.width='26px';ring.style.height='26px';ring.style.opacity='1'; });
+});
+
+/* ══ Scroll reveal ══ */
+const obs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+/* ══ Active nav ══ */
+const secs = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{ if(window.scrollY>=s.offsetTop-180) cur=s.id; });
+  navAs.forEach(a=>{ a.style.color = a.getAttribute('href')==='#'+cur?'var(--purple)':''; });
+});
+
+/* ══ Default content (overridden by content.json when Supabase is live) ══ */
+const DEFAULT = {
+  skills: [
+    { label_en:"ML / DL", label_zh:"机器学习", tags:[{t:"PyTorch",f:1},{t:"TensorFlow",f:1},{t:"scikit-learn"},{t:"Transformers"},{t:"LangChain"},{t:"ONNX"}] },
+    { label_en:"Data",    label_zh:"数据处理", tags:[{t:"Python",f:1},{t:"Pandas"},{t:"NumPy"},{t:"SQL"},{t:"Spark"},{t:"dbt"}] },
+    { label_en:"Infra",   label_zh:"基础设施", tags:[{t:"Docker",f:1},{t:"Kubernetes"},{t:"AWS"},{t:"MLflow"},{t:"FastAPI"},{t:"GitHub Actions"}] },
+    { label_en:"Research",label_zh:"研究方向", tags:[{t:"NLP",f:1},{t:"Computer Vision",f:1},{t:"RL"},{t:"Fine-tuning"},{t:"RAG"}] },
+  ],
+  projects: [
+    {
+      num:"01",
+      title_en:"LLM Fine-tuning Pipeline",
+      title_zh:"大语言模型微调流水线",
+      desc_en:"End-to-end pipeline for domain-specific fine-tuning of large language models. Achieved 18% improvement on benchmark vs. base model. Supports LoRA, full fine-tune, and DPO alignment.",
+      desc_zh:"面向特定领域的大语言模型端到端微调流水线，相比基础模型在基准测试上提升 18%，支持 LoRA、全量微调和 DPO 对齐策略。",
+      stack:["PyTorch","Transformers","LoRA","W&B"],
+      year:"2024", url:"#"
+    },
+    {
+      num:"02",
+      title_en:"Real-time Anomaly Detection",
+      title_zh:"实时异常检测系统",
+      desc_en:"Streaming anomaly detection for time-series sensor data deployed on edge devices. Sub-10ms inference latency. Reduced false positive rate by 40% vs. rule-based baseline.",
+      desc_zh:"面向时序传感器数据的流式异常检测系统，部署在边缘设备上，推理延迟低于 10ms，误报率相比规则基线降低 40%。",
+      stack:["TensorFlow Lite","Kafka","FastAPI","Docker"],
+      year:"2024", url:"#"
+    },
+    {
+      num:"03",
+      title_en:"Multi-modal RAG System",
+      title_zh:"多模态 RAG 系统",
+      desc_en:"Document intelligence platform combining text and visual understanding. Ingests PDFs, images and structured data into a unified retrieval pipeline. Zero external API dependencies.",
+      desc_zh:"结合文本与视觉理解的文档智能平台，将 PDF、图像和结构化数据统一接入检索流水线，完全基于开源模型，无需外部 API。",
+      stack:["LangChain","CLIP","ChromaDB","Streamlit"],
+      year:"2023", url:"#"
+    },
+  ]
+};
+
+/* ══ Render functions ══ */
+function renderSkills(data) {
+  const grid = document.getElementById('skills-grid');
+  grid.innerHTML = data.map(cat=>`
+    <div class="skill-cat">
+      <div class="skill-cat-label">
+        <span data-lang="en">${cat.label_en}</span>
+        <span data-lang="zh">${cat.label_zh}</span>
+      </div>
+      <div class="skill-tags">${cat.tags.map(t=>`<span class="tag${t.f?' ft':''}">${t.t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+  // re-apply lang to newly injected elements
+  document.body.classList.toggle('zh', lang==='zh');
+}
+
+function renderProjects(data) {
+  const list = document.getElementById('projects-list');
+  list.innerHTML = data.map(p=>`
+    <a href="${p.url||'#'}" class="project-card reveal" ${p.url&&p.url!=='#'?'target="_blank"':''}>
+      <div>
+        <p class="p-num">${p.num}</p>
+        <h3 class="p-title">
+          <span data-lang="en">${p.title_en}</span>
+          <span data-lang="zh">${p.title_zh}</span>
+        </h3>
+        <p class="p-desc">
+          <span data-lang="en">${p.desc_en}</span>
+          <span data-lang="zh">${p.desc_zh}</span>
+        </p>
+        <div class="p-stack">${p.stack.map(s=>`<span class="s-tag">${s}</span>`).join('')}</div>
+      </div>
+      <div class="p-meta">
+        <span class="p-year">${p.year}</span>
+        <span class="p-arrow">↗</span>
+      </div>
+    </a>
+  `).join('');
+  // reveal observer for new cards
+  document.querySelectorAll('.project-card.reveal').forEach(el=>obs.observe(el));
+  document.body.classList.toggle('zh', lang==='zh');
+}
+
+/* ══ Load from content.json (Supabase-written file) or use defaults ══ */
+async function loadContent() {
+  try {
+    const r = await fetch('content.json?_='+Date.now());
+    if (!r.ok) throw new Error('no content.json');
+    const data = await r.json();
+    if (data.skills)   renderSkills(data.skills);
+    if (data.projects) renderProjects(data.projects);
+    if (data.meta) {
+      if (data.meta.name_en) {
+        document.querySelector('.nav-logo').innerHTML = data.meta.initials+'<span>.dev</span>';
+        document.querySelector('#stat-projects').textContent = data.meta.project_count||'6+';
+        document.querySelector('#stat-years').textContent    = data.meta.years_exp||'3';
+      }
+    }
+  } catch {
+    renderSkills(DEFAULT.skills);
+    renderProjects(DEFAULT.projects);
+  }
+}
+loadContent();
+</script>
+</body>
+</html>
