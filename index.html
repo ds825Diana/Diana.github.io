@@ -223,23 +223,17 @@
 <!-- ── Hero ── -->
 <section id="hero">
   <div class="hero-inner">
-    <p class="hero-tag">
-      <span data-lang="en">AI / ML ENGINEER &amp; RESEARCHER</span>
-      <span data-lang="zh">AI / 机器学习工程师 &amp; 研究员</span>
-    </p>
     <h1 class="hero-name">
       <span data-lang="en" id="hero-name-en">Your Name</span>
       <span data-lang="zh" id="hero-name-zh" style="display:none">你的名字</span>
     </h1>
     <p class="hero-title">
-      <span data-lang="en">MACHINE LEARNING · DATA SCIENCE · DEEP LEARNING</span>
-      <span data-lang="zh">机器学习 · 数据科学 · 深度学习</span>
+      <span data-lang="en">MACHINE LEARNING · DEEP LEARNING · ROBOTICS</span>
+      <span data-lang="zh">机器学习 · 深度学习 · 机器人</span>
     </p>
     <p class="hero-bio">
-      <span data-lang="en" id="hero-bio-en">I build intelligent systems that bridge research and production.
-      Passionate about making models that actually work in the real world —
-      from experimentation to deployment at scale.</span>
-      <span data-lang="zh" id="hero-bio-zh">我构建连接研究与生产的智能系统，专注于将模型从实验阶段推进到大规模部署，让 AI 真正落地。</span>
+      <span data-lang="en" id="hero-bio-en">Currently pursuing an MSc in Artificial Intelligence Applications and Innovation at Imperial College London (I-X Lab). Specializing in computer vision, multimodal perception and autonomous robotics, with end-to-end experience from algorithm R&amp;D to production deployment. Proficient in ROS, PyTorch and edge inference, with real-world projects spanning UAV inspection, intelligent forklifts and IoT health monitoring.</span>
+      <span data-lang="zh" id="hero-bio-zh">目前就读于帝国理工学院 I-X Lab，攻读人工智能应用与创新硕士学位。专注于计算机视觉、多模态感知与自主机器人系统，具备从算法研发到生产部署的完整工程能力。熟练运用 ROS、PyTorch 及边缘推理技术栈，在无人机巡检、智能叉车与 IoT 健康监测项目中均有实际落地经验。</span>
     </p>
     <div class="hero-cta">
       <a href="#projects" class="btn btn-primary">
@@ -250,16 +244,6 @@
         <span data-lang="en">RÉSUMÉ ↗</span>
         <span data-lang="zh">简历 ↗</span>
       </a>
-    </div>
-  </div>
-  <div class="hero-stats">
-    <div class="stat">
-      <div class="stat-num" id="stat-projects">6+</div>
-      <div class="stat-label"><span data-lang="en">PROJECTS</span><span data-lang="zh">项目</span></div>
-    </div>
-    <div class="stat">
-      <div class="stat-num" id="stat-years">3</div>
-      <div class="stat-label"><span data-lang="en">YEARS EXP</span><span data-lang="zh">年经验</span></div>
     </div>
   </div>
 </section>
@@ -276,30 +260,25 @@
   <div class="about-grid">
     <div class="about-text reveal">
       <p data-lang="en">
-        Hi — I'm <span class="about-hl about-hl-name">Diandian (Diana) Sun</span>, an AI/ML engineer
-        based in <span id="about-city-en">London</span>. Currently pursuing / completing my degree in [Field] at [University],
-        with a focus on deep learning and applied machine learning systems.
+        Currently pursuing an MSc in Artificial Intelligence Applications and Innovation at
+        <span class="about-hl">Imperial College London (I-X Lab)</span>.
+        Specializing in computer vision, multimodal perception and autonomous robotics,
+        with end-to-end experience from algorithm R&amp;D to production deployment.
       </p>
       <p data-lang="zh">
-        你好 — 我是<span class="about-hl about-hl-name">孙点点</span>，一名位于<span id="about-city-zh">伦敦</span>的 AI/ML 工程师，
-        目前就读/毕业于[学校][专业]，专注于深度学习与机器学习系统的应用研究。
+        目前就读于<span class="about-hl">帝国理工学院 I-X Lab</span>，攻读人工智能应用与创新硕士学位。
+        专注于计算机视觉、多模态感知与自主机器人系统，具备从算法研发到生产部署的完整工程能力。
       </p>
       <p data-lang="en">
-        My work spans everything from building <span class="about-hl">NLP pipelines</span>
-        and training neural networks, to deploying scalable inference services.
-        I care about clean code, reproducible experiments, and models that generalize.
+        Proficient in ROS, PyTorch and edge inference, with real-world projects spanning
+        <span class="about-hl">UAV inspection</span>, intelligent forklifts and IoT health monitoring.
+        Passionate about embodied AI and cross-domain transfer — turning multimodal perception
+        into systems that change the physical world.
       </p>
       <p data-lang="zh">
-        我的工作涵盖构建 <span class="about-hl">NLP 流水线</span>、训练神经网络，
-        到部署可扩展的推理服务。我注重代码整洁、实验可复现，以及具备泛化能力的模型。
-      </p>
-      <p data-lang="en">
-        When I'm not training models, you'll find me reading papers,
-        contributing to open source, or exploring the intersection of AI and [your interest].
-      </p>
-      <p data-lang="zh">
-        不训练模型的时候，你能找到我在读论文、为开源项目做贡献，
-        或者探索 AI 与[你的兴趣]的交叉领域。
+        熟练运用 ROS、PyTorch 及边缘推理技术栈，在<span class="about-hl">无人机巡检</span>、
+        智能叉车与 IoT 健康监测项目中均有实际落地经验。热衷于具身智能与跨场景迁移研究，
+        致力于将多模态感知转化为改变物理世界的智能系统。
       </p>
       <div class="about-links">
         <a href="https://github.com/yourhandle" class="icon-link" target="_blank">⌥ GitHub</a>
@@ -515,9 +494,6 @@ async function loadContent() {
       // hero bio
       if (m.bio_en) document.getElementById('hero-bio-en').textContent = m.bio_en;
       if (m.bio_zh) document.getElementById('hero-bio-zh').textContent = m.bio_zh;
-      // stats
-      if (m.project_count) document.getElementById('stat-projects').textContent = m.project_count;
-      if (m.years_exp)     document.getElementById('stat-years').textContent    = m.years_exp;
       // email
       if (m.email) {
         document.querySelectorAll('a[href^="mailto:"]').forEach(a => a.href = 'mailto:'+m.email);
