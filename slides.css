@@ -14,6 +14,11 @@
   object-fit: contain;
 }
 
+.slide-controls button:disabled {
+  opacity: 0.35;
+  cursor: wait;
+}
+
 @media (max-width: 720px) {
   .slide-stage { height: 432px; }
 }
