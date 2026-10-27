@@ -1,7 +1,8 @@
 const insightsList = document.getElementById('insightsList');
 
 if (insightsList) {
-  fetch('https://api.github.com/repos/ds825Diana/Diana.github.io/issues?state=open&per_page=30', {
+  fetch(`https://api.github.com/repos/ds825Diana/Diana.github.io/issues?state=open&per_page=30&_=${Date.now()}`, {
+    cache: 'no-store',
     headers: { Accept: 'application/vnd.github+json' }
   })
     .then(response => {
